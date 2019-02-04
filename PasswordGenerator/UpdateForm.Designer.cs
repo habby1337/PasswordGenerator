@@ -28,12 +28,15 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UpdateForm));
             this.bCheckUpdate = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.TBLog = new System.Windows.Forms.RichTextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
+            this.lcheck = new System.Windows.Forms.Label();
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.SuspendLayout();
             // 
             // bCheckUpdate
@@ -43,7 +46,7 @@
             this.bCheckUpdate.FlatAppearance.MouseOverBackColor = System.Drawing.Color.DarkCyan;
             this.bCheckUpdate.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.bCheckUpdate.ForeColor = System.Drawing.Color.White;
-            this.bCheckUpdate.Location = new System.Drawing.Point(146, 309);
+            this.bCheckUpdate.Location = new System.Drawing.Point(152, 309);
             this.bCheckUpdate.Name = "bCheckUpdate";
             this.bCheckUpdate.Size = new System.Drawing.Size(216, 32);
             this.bCheckUpdate.TabIndex = 13;
@@ -69,9 +72,10 @@
             this.TBLog.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.TBLog.Cursor = System.Windows.Forms.Cursors.Default;
             this.TBLog.ForeColor = System.Drawing.Color.White;
-            this.TBLog.Location = new System.Drawing.Point(63, 111);
+            this.TBLog.Location = new System.Drawing.Point(12, 111);
             this.TBLog.Name = "TBLog";
-            this.TBLog.Size = new System.Drawing.Size(382, 174);
+            this.TBLog.ReadOnly = true;
+            this.TBLog.Size = new System.Drawing.Size(502, 174);
             this.TBLog.TabIndex = 15;
             this.TBLog.Text = "";
             // 
@@ -98,12 +102,29 @@
             this.label3.TabIndex = 17;
             this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
+            // lcheck
+            // 
+            this.lcheck.AutoSize = true;
+            this.lcheck.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lcheck.ForeColor = System.Drawing.Color.White;
+            this.lcheck.Location = new System.Drawing.Point(1, 335);
+            this.lcheck.Name = "lcheck";
+            this.lcheck.Size = new System.Drawing.Size(86, 16);
+            this.lcheck.TabIndex = 18;
+            this.lcheck.Text = "next check: ";
+            this.lcheck.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // timer1
+            // 
+            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+            // 
             // UpdateForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
             this.ClientSize = new System.Drawing.Size(526, 353);
+            this.Controls.Add(this.lcheck);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.TBLog);
@@ -130,5 +151,7 @@
         private System.Windows.Forms.RichTextBox TBLog;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label lcheck;
+        private System.Windows.Forms.Timer timer1;
     }
 }

@@ -18,31 +18,24 @@ namespace PasswordGenerator
         {
             InitializeComponent();
 
+            //Timer Setup
+            timer1.Interval = 1000;
+            timer1.Start();
         }
 
-        private string ver_str;
-
-        private void bCheckUpdate_Click(object sender, EventArgs e)
+        public int time = 60;
+        private void timer1_Tick(object sender, EventArgs e)
         {
-            isUpdateReadyAsync();
-        }
-
-        private void UpdateForm_Load(object sender, EventArgs e)
-        {
-            label1.Text += ApplicationForm.ProductVersion;
-            if (Ping() == true)
+            if (time == 0)
             {
-                label3.Text += "Online";
-                label3.ForeColor = Color.Green;
+                time += 60;
+                checkHostStatus();
             }
             else
             {
-                label3.Text += "Offline";
-                label3.ForeColor = Color.DarkRed;
-                bCheckUpdate.Enabled = false;
-
+                time--;
             }
-
+            lcheck.Text = "next check: " + time;
         }
 
         public void errorBox(System.Exception exception)
@@ -55,10 +48,38 @@ namespace PasswordGenerator
             return TBLog.Text += DateTime.Now.ToString("HH:mm:ss") + ": " + log + "\n";
         }
 
-        private bool Ping()
+        private string ver_str;
+        private void bCheckUpdate_Click(object sender, EventArgs e)
+        {
+            isUpdateReadyAsync();
+        }
+
+        private void UpdateForm_Load(object sender, EventArgs e)
+        {
+            label1.Text += ApplicationForm.ProductVersion;
+
+            if (checkHostStatus() == true)
+            {
+                if (checkHostStatus() == true)
+                {
+                    label3.Text += "Online";
+                    label3.ForeColor = Color.Green;
+                }
+                else
+                {
+                    label3.Text += "Offline";
+                    label3.ForeColor = Color.DarkRed;
+                    bCheckUpdate.Enabled = false;
+
+                }
+            }
+        }
+
+        private bool checkHostStatus()
         {
             try
             {
+                log("Checking host status...");
                 HttpWebRequest request = (HttpWebRequest)HttpWebRequest.Create("https://github.com");
                 request.Timeout = 3000;
                 request.AllowAutoRedirect = false; // find out if this site is up and don't follow a redirector
@@ -83,10 +104,7 @@ namespace PasswordGenerator
             Release latest = tmp[0];
             string version = latest.TagName;
 
-            Console.WriteLine(
-                "The latest release is tagged at {0} and is named {1}",
-                latest.TagName,
-                latest.Name);
+            log("La versione più recente è: [" + latest.TagName + "] - Risale al: [" + latest.PublishedAt + "]");
 
             return Convert.ToString(version);
         }
@@ -95,15 +113,11 @@ namespace PasswordGenerator
         {
             try
             {
-
-
                 using (WebClient client = new WebClient())
                 {
                     ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
 
                     log("Richiesta web creata!");
-
-
                     log("Cercando aggiornamenti da github...");
 
                     string versione_string = ver_str;
@@ -121,25 +135,15 @@ namespace PasswordGenerator
                             // Uri uri = new Uri("https://github.com/habby1337/Percentuale_Alunni/releases/download/" + GetReleaseVersionAsync() + "/PercentualeAlunni.exe"); //
                             //client.DownloadFileAsync(uri, "PercentualeAlunni_new.exe");
 
-
-
                             Uri uri = new Uri("https://github.com/habby1337/PasswordGenerator/releases/download/" + versione_string + "/PasswordGenerator.exe"); //
 
                             client.DownloadFileAsync(uri, "PasswordGenerator_new.exe");
 
-
-
-
                             log("Scaricando l'aggionamento...[0%]");
                             log("Scaricando l'aggionamento...[50%]");
-                            log("Scaricando gli asset...[0%]");
-                            log("Scaricando gli asset...[100%]"); ;
-                            log("Completando la richiesta...[0%]");
-                            log("Completando la richiesta...[100%]");
                             log("Aggiornamento scaricato!...[100%]");
 
                             client.DownloadFileCompleted += new AsyncCompletedEventHandler(Completato);
-
                         }
                         else
                         {
@@ -198,7 +202,6 @@ namespace PasswordGenerator
         {
             ver_str = await GetReleaseVersionAsync();
             downloadUpdate();
-
         }
     }
 }
